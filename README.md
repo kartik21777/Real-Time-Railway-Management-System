@@ -1,9 +1,3 @@
-# PBl
-
-A project for college
-Testing some things
-
-
-## Subhead
-
-I forgot a lot about git and github
+# PBL
+A Real time railway management system, with options to add/delete platforms and trains.
+A GUI will also be used for this, everything will be in JAVA.
