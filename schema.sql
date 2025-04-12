@@ -24,6 +24,10 @@ SET default_table_access_method = heap;
 --
 -- Name: platforms; Type: TABLE; Schema: public; Owner: postgres
 --
+SET search_path TO public;
+
+-- Explicitly create the public schema (if not already created)
+CREATE SCHEMA IF NOT EXISTS public;
 
 CREATE TABLE public.platforms (
     platform_id integer NOT NULL,
@@ -195,6 +199,62 @@ ALTER TABLE ONLY public.trains
 ALTER TABLE ONLY public.platforms
     ADD CONSTRAINT platforms_station_id_fkey FOREIGN KEY (station_id) REFERENCES public.stations(station_id) ON DELETE CASCADE;
 
+CREATE OR REPLACE FUNCTION update_platform_count()
+RETURNS TRIGGER AS $$
+BEGIN
+  -- Use OLD.station_id during DELETE, NEW.station_id during INSERT
+  IF TG_OP = 'DELETE' THEN
+    UPDATE stations
+    SET number_of_platforms = (
+      SELECT COUNT(*) FROM platforms WHERE station_id = OLD.station_id
+    )
+    WHERE station_id = OLD.station_id;
+
+    RETURN OLD;
+
+  ELSIF TG_OP = 'INSERT' THEN
+    UPDATE stations
+    SET number_of_platforms = (
+      SELECT COUNT(*) FROM platforms WHERE station_id = NEW.station_id
+    )
+    WHERE station_id = NEW.station_id;
+
+    RETURN NEW;
+  END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+
+-- Triggers after insert and delete on platforms
+CREATE TRIGGER trg_update_platform_count_after_insert
+AFTER INSERT ON platforms
+FOR EACH ROW
+EXECUTE FUNCTION update_platform_count();
+
+CREATE TRIGGER trg_update_platform_count_after_delete
+AFTER DELETE ON platforms
+FOR EACH ROW
+EXECUTE FUNCTION update_platform_count();
+
+-- Corrected trigger for updating station_id
+CREATE OR REPLACE FUNCTION update_station_id_function()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Check if station_id has actually changed
+    IF OLD.station_id != NEW.station_id THEN
+        -- Update all platforms that had the old station_id
+        UPDATE platforms
+        SET station_id = NEW.station_id
+        WHERE station_id = OLD.station_id;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER update_station_id
+AFTER UPDATE ON platforms
+FOR EACH ROW
+EXECUTE FUNCTION update_station_id_function();
 
 --
 -- PostgreSQL database dump complete
