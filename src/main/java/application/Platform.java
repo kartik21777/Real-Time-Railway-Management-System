@@ -1,18 +1,16 @@
 package application;
+import java.time.LocalTime;
 public class Platform {
     private int id;
     private String platformName;
-    private int stationId; // Foreign key linking to the stations table
-    private Train currentTrain; // Represents the train currently occupying this platform (initially null)
-
+    private LocalTime nextFree;
     public Platform() {
+        this.nextFree = LocalTime.of(0, 0);
     }
 
-    public Platform(int id, String platformName, int stationId, Train currentTrain) {
+    public Platform(int id, String platformName) {
         this.id = id;
         this.platformName = platformName;
-        this.stationId = stationId;
-        this.currentTrain = currentTrain;
     }
 
     // Getters
@@ -24,13 +22,10 @@ public class Platform {
         return platformName;
     }
 
-    public int getStationId() {
-        return stationId;
+    public LocalTime getNextFree() {
+        return nextFree;
     }
 
-    public Train getCurrentTrain() {
-        return currentTrain;
-    }
 
     // Setters
     public void setId(int id) {
@@ -41,11 +36,7 @@ public class Platform {
         this.platformName = platformName;
     }
 
-    public void setStationId(int stationId) {
-        this.stationId = stationId;
-    }
-
-    public void setCurrentTrain(Train currentTrain) {
-        this.currentTrain = currentTrain;
+    public void setNextFree(LocalTime nextFree) {
+        this.nextFree = nextFree;
     }
 }

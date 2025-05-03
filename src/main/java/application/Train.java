@@ -1,32 +1,34 @@
 package application;
-import java.time.LocalDateTime;
+
+import java.time.LocalTime;
 
 public class Train {
     private int id;
-    private String trainNumber;
+    private String name;
+    private LocalTime arrivalTime;
+    private LocalTime departureTime;
+    private int platformId;
     private String color;
     private int priority;
-    private TrainState currentState;
-    private LocalDateTime scheduledArrivalTime;
-    private LocalDateTime actualArrivalTime;
-    private LocalDateTime scheduledDepartureTime;
-    private Platform assignedPlatform; // The platform the train is currently assigned to
-    private Station destinationStation; // The intended destination station
+    private LocalTime actualArrival;
+    private LocalTime actualDeparture;
 
     public Train() {
+        this.actualArrival = LocalTime.of(0,0);
+        this.actualDeparture = LocalTime.of(0,0);
     }
 
-    public Train(int id, String trainNumber, String color, int priority, TrainState currentState, LocalDateTime scheduledArrivalTime, LocalDateTime actualArrivalTime, LocalDateTime scheduledDepartureTime, Platform assignedPlatform, Station destinationStation) {
+    public Train(int id, String name, LocalTime arrivalTime, LocalTime departureTime, int platformId,
+                 String color, int priority, LocalTime actualArrival, LocalTime actualDeparture) {
         this.id = id;
-        this.trainNumber = trainNumber;
+        this.name = name;
+        this.arrivalTime = arrivalTime;
+        this.departureTime = departureTime;
+        this.platformId = platformId;
         this.color = color;
         this.priority = priority;
-        this.currentState = currentState;
-        this.scheduledArrivalTime = scheduledArrivalTime;
-        this.actualArrivalTime = actualArrivalTime;
-        this.scheduledDepartureTime = scheduledDepartureTime;
-        this.assignedPlatform = assignedPlatform;
-        this.destinationStation = destinationStation;
+        this.actualArrival = actualArrival;
+        this.actualDeparture = actualDeparture;
     }
 
     // Getters
@@ -34,8 +36,20 @@ public class Train {
         return id;
     }
 
-    public String getTrainNumber() {
-        return trainNumber;
+    public String getName() {
+        return name;
+    }
+
+    public LocalTime getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public LocalTime getDepartureTime() {
+        return departureTime;
+    }
+
+    public int getPlatformId() {
+        return platformId;
     }
 
     public String getColor() {
@@ -46,28 +60,12 @@ public class Train {
         return priority;
     }
 
-    public TrainState getCurrentState() {
-        return currentState;
+    public LocalTime getActualArrival() {
+        return actualArrival;
     }
 
-    public LocalDateTime getScheduledArrivalTime() {
-        return scheduledArrivalTime;
-    }
-
-    public LocalDateTime getActualArrivalTime() {
-        return actualArrivalTime;
-    }
-
-    public LocalDateTime getScheduledDepartureTime() {
-        return scheduledDepartureTime;
-    }
-
-    public Platform getAssignedPlatform() {
-        return assignedPlatform;
-    }
-
-    public Station getDestinationStation() {
-        return destinationStation;
+    public LocalTime getActualDeparture() {
+        return actualDeparture;
     }
 
     // Setters
@@ -75,8 +73,20 @@ public class Train {
         this.id = id;
     }
 
-    public void setTrainNumber(String trainNumber) {
-        this.trainNumber = trainNumber;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setArrivalTime(LocalTime arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
+    public void setDepartureTime(LocalTime departureTime) {
+        this.departureTime = departureTime;
+    }
+
+    public void setPlatformId(int platformId) {
+        this.platformId = platformId;
     }
 
     public void setColor(String color) {
@@ -87,27 +97,11 @@ public class Train {
         this.priority = priority;
     }
 
-    public void setCurrentState(TrainState currentState) {
-        this.currentState = currentState;
+    public void setActualArrival(LocalTime actualArrival) {
+        this.actualArrival = actualArrival;
     }
 
-    public void setScheduledArrivalTime(LocalDateTime scheduledArrivalTime) {
-        this.scheduledArrivalTime = scheduledArrivalTime;
-    }
-
-    public void setActualArrivalTime(LocalDateTime actualArrivalTime) {
-        this.actualArrivalTime = actualArrivalTime;
-    }
-
-    public void setScheduledDepartureTime(LocalDateTime scheduledDepartureTime) {
-        this.scheduledDepartureTime = scheduledDepartureTime;
-    }
-
-    public void setAssignedPlatform(Platform assignedPlatform) {
-        this.assignedPlatform = assignedPlatform;
-    }
-
-    public void setDestinationStation(Station destinationStation) {
-        this.destinationStation = destinationStation;
+    public void setActualDeparture(LocalTime actualDeparture) {
+        this.actualDeparture = actualDeparture;
     }
 }
