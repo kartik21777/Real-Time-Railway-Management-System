@@ -1,13 +1,16 @@
 package application;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 public class Platform {
     private int id;
     private String platformName;
     private LocalTime nextFree;
+    DateTimeFormatter formatter= DateTimeFormatter.ofPattern("HH:mm");
     public Platform(int id, String platformName) {
         this.id = id;
         this.platformName = platformName;
         this.nextFree = LocalTime.of(0, 0);
+
     }
 
     // Getters
@@ -35,5 +38,9 @@ public class Platform {
 
     public void setNextFree(LocalTime nextFree) {
         this.nextFree = nextFree;
+    }
+    public String toString() {
+        return String.format("Platform{id=%d, name='%s', nextFree='%s'}",
+                id, platformName, nextFree.format(formatter));
     }
 }

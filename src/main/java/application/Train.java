@@ -1,7 +1,7 @@
 package application;
 
 import java.time.LocalTime;
-
+import java.time.format.DateTimeFormatter;
 public class Train {
     private int id;
     private String name;
@@ -12,18 +12,17 @@ public class Train {
     private int priority;
     private LocalTime actualArrival;
     private LocalTime actualDeparture;
+    DateTimeFormatter formatter= DateTimeFormatter.ofPattern("HH:mm");
 
-    public Train(int id, String name, LocalTime arrivalTime, LocalTime departureTime, int platformId,
-                 String color, int priority, LocalTime actualArrival, LocalTime actualDeparture) {
+    public Train(int id, String name, String arrivalTime, String departureTime,
+                 String color, int priority) {
         this.id = id;
         this.name = name;
-        this.arrivalTime = arrivalTime;
-        this.departureTime = departureTime;
-        this.platformId = platformId;
+        this.arrivalTime = LocalTime.parse(arrivalTime,formatter);
+        this.departureTime = LocalTime.parse(departureTime,formatter);
+        this.platformId = 0;
         this.color = color;
         this.priority = priority;
-        this.actualArrival = actualArrival;
-        this.actualDeparture = actualDeparture;
         this.actualArrival = LocalTime.of(0,0);
         this.actualDeparture = LocalTime.of(0,0);
     }
@@ -100,5 +99,10 @@ public class Train {
 
     public void setActualDeparture(LocalTime actualDeparture) {
         this.actualDeparture = actualDeparture;
+    }
+    public String toString() {
+        return String.format("Train{id=%d, name='%s', arrivalTime='%s', departureTime='%s', actualArrival='%s', actualDeparture='%s', color='%s', priority=%d}",
+                id, name, arrivalTime.format(formatter), departureTime.format(formatter),
+                actualArrival.format(formatter), actualDeparture.format(formatter), color, priority);
     }
 }
