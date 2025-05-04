@@ -2,6 +2,7 @@ package dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import application.Platform;
 
 public class PlatformManager {
     // In-memory storage for all Platform objects

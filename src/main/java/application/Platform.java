@@ -4,13 +4,10 @@ public class Platform {
     private int id;
     private String platformName;
     private LocalTime nextFree;
-    public Platform() {
-        this.nextFree = LocalTime.of(0, 0);
-    }
-
     public Platform(int id, String platformName) {
         this.id = id;
         this.platformName = platformName;
+        this.nextFree = LocalTime.of(0, 0);
     }
 
     // Getters

@@ -13,11 +13,6 @@ public class Train {
     private LocalTime actualArrival;
     private LocalTime actualDeparture;
 
-    public Train() {
-        this.actualArrival = LocalTime.of(0,0);
-        this.actualDeparture = LocalTime.of(0,0);
-    }
-
     public Train(int id, String name, LocalTime arrivalTime, LocalTime departureTime, int platformId,
                  String color, int priority, LocalTime actualArrival, LocalTime actualDeparture) {
         this.id = id;
@@ -29,6 +24,8 @@ public class Train {
         this.priority = priority;
         this.actualArrival = actualArrival;
         this.actualDeparture = actualDeparture;
+        this.actualArrival = LocalTime.of(0,0);
+        this.actualDeparture = LocalTime.of(0,0);
     }
 
     // Getters

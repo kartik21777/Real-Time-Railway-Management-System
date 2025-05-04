@@ -2,6 +2,7 @@ package dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import application.Train;
 
 public class TrainManager {
     // In‐memory storage for all trains
