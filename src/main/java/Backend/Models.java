@@ -1,5 +1,6 @@
 package Backend;
 import java.time.Duration;
+import java.time.LocalTime;
 import java.util.PriorityQueue;
 import java.util.Comparator;
 import java.util.ArrayList;
@@ -104,5 +105,51 @@ public class Models {
 
     public static void clearProcessedList() {
         processedList.clear();
+    }
+    public static void set(Train train)
+    {
+        Platform p1 = popNextPlatform();
+        Duration d = getTrainDuration(train);
+        if(p1.getNextFree().isAfter(train.getArrivalTime()))
+        {
+            LocalTime newTime = p1.getNextFree().plus(d);
+            train.setActualArrival(p1.getNextFree());
+            train.setActualDeparture(newTime);
+            p1.setNextFree(newTime);
+        }
+        else{
+            p1.setNextFree(train.getDepartureTime());
+            train.setActualArrival(train.getArrivalTime());
+            train.setActualDeparture(train.getDepartureTime());
+        }
+        addPlatform(p1);
+    }
+    public static void tails(Train train)
+    {
+        List<Train> tail = dequeueTrainsFromIndex(waitingList.indexOf(train));
+
+        for (int i = 1; i < tail.size(); i++) {
+            Train t = tail.get(i);
+            LocalTime at = t.getActualArrival();
+            int pid = t.getPlatformId();
+            Platform plat = null;
+            for (Platform p : platformHeap) {
+                if (p.getId() == pid) {
+                    plat = p;
+                    break;
+                }
+            }
+
+            if (plat != null && at.isBefore(plat.getNextFree())) {
+                platformHeap.remove(plat);
+                plat.setNextFree(at);
+                platformHeap.add(plat);
+            }
+        }
+        for (int i = 0; i < tail.size(); i++)
+        {
+            Train t = tail.get(i);
+            set(t);
+        }
     }
 }

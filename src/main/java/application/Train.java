@@ -1,5 +1,5 @@
 package application;
-
+import Backend.AddTrain;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 public class Train {
@@ -13,7 +13,6 @@ public class Train {
     private LocalTime actualArrival;
     private LocalTime actualDeparture;
     DateTimeFormatter formatter= DateTimeFormatter.ofPattern("HH:mm");
-
     public Train(int id, String name, String arrivalTime, String departureTime,
                  String color, int priority) {
         this.id = id;
