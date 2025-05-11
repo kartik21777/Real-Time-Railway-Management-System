@@ -23,8 +23,13 @@ public class AddTrain {
             Platform p1 = Models.peekNextPlatform();
             Models.popNextPlatform();
             Duration d = Models.getTrainDuration(train);
-            LocalTime newTime = p1.getNextFree().plus(d);
-            p1.setNextFree(newTime);
+            if(p1.getNextFree().isAfter(train.getArrivalTime()))
+            {
+                LocalTime newTime = p1.getNextFree().plus(d);
+                p1.setNextFree(newTime);
+            }
+            else
+                p1.setNextFree(train.getDepartureTime());
             train.setActualArrival(train.getArrivalTime());
             train.setActualDeparture(train.getDepartureTime());
             Models.addPlatform(p1);
@@ -36,8 +41,6 @@ public class AddTrain {
                     Train t = tail.get(i);
                     LocalTime at = t.getActualArrival();
                     int pid = t.getPlatformId();
-
-
                     Platform plat = null;
                     for (Platform p : Models.platformHeap) {
                         if (p.getId() == pid) {
@@ -55,10 +58,19 @@ public class AddTrain {
             for (int i = 0; i < tail.size(); i++)
             {
                 Train t = tail.get(i);
-                Platform p = Models.peekNextPlatform();
+                Platform p1 = Models.peekNextPlatform();
                 Models.popNextPlatform();
-                p.setNextFree(p.getNextFree().plus(Models.getTrainDuration(t)));
-
+                Duration d = Models.getTrainDuration(t);
+                if(p1.getNextFree().isAfter(t.getArrivalTime()))
+                {
+                    LocalTime newTime = p1.getNextFree().plus(d);
+                    p1.setNextFree(newTime);
+                }
+                else
+                    p1.setNextFree(t.getDepartureTime());
+                t.setActualArrival(t.getArrivalTime());
+                t.setActualDeparture(t.getDepartureTime());
+                Models.addPlatform(p1);
             }
             }
         }
