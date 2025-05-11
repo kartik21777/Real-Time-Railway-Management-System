@@ -1,24 +1,25 @@
 package Backend;
-
+import java.time.Duration;
 import java.util.PriorityQueue;
 import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import application.Platform;
 import application.Train;
 
 public class Models {
 
-    private static PriorityQueue<Platform> platformHeap;
-    private static PriorityQueue<Train> waitingQueue;
+    public static PriorityQueue<Platform> platformHeap;
+    public static List<Train> waitingList;
 
     static {
         platformHeap = new PriorityQueue<>(
                 Comparator.comparing(Platform::getNextFree)
                         .thenComparing(Platform::getId)
         );
-        waitingQueue = new PriorityQueue<>(
-                Comparator.comparing(Train::getArrivalTime)
-                        .thenComparing(Train::getPriority)
-        );
+        waitingList = new ArrayList<>();
     }
 
     public static void addPlatform(Platform platform) {
@@ -34,15 +35,46 @@ public class Models {
     }
 
     public static void enqueueTrain(Train train) {
-        waitingQueue.add(train);
+        waitingList.add(train);
+        Collections.sort(waitingList, Comparator
+                .comparing(Train::getArrivalTime)
+                .thenComparing(Train::getPriority)
+        );
     }
 
     public static Train dequeueTrain() {
-        return waitingQueue.poll();
+        if (waitingList.isEmpty()) {
+            return null;
+        }
+        return waitingList.remove(0);
     }
 
     public static Train peekWaitingTrain() {
-        return waitingQueue.peek();
+        if (waitingList.isEmpty()) {
+            return null;
+        }
+        return waitingList.get(0);
+    }
+
+    public static Train getLastTrain() {
+        if (waitingList.isEmpty()) {
+            return null;
+        }
+        return waitingList.get(waitingList.size() - 1);
+    }
+
+    public static List<Train> getAllWaitingTrains() {
+        return Collections.unmodifiableList(waitingList);
+    }
+    public static List<Train> dequeueTrainsFromIndex(int index) {
+        if (index < 0 || index >= waitingList.size()) {
+            return Collections.emptyList();
+        }
+        List<Train> sublist = new ArrayList<>(waitingList.subList(index, waitingList.size()));
+        waitingList.subList(index, waitingList.size()).clear();
+        return sublist;
+    }
+    public static Duration getTrainDuration(Train train) {
+        return Duration.between(train.getArrivalTime(), train.getDepartureTime());
     }
 }
-
