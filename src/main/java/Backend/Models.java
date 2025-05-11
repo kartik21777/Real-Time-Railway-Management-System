@@ -45,7 +45,7 @@ public class Models {
         );
     }
 
-    public static Train dequeueTrain() {
+    public static Train dequeueFirstTrain() {
         if (waitingList.isEmpty()) {
             return null;
         }
@@ -85,7 +85,6 @@ public class Models {
 
     public static void addProcessedTrain(Train train) {
         processedList.add(train);
-        processedList.sort(Comparator.comparing(Train::getActualDeparture).reversed());
     }
 
     public static boolean removeProcessedTrain(Train train) {
@@ -124,10 +123,8 @@ public class Models {
         }
         addPlatform(p1);
     }
-    public static void tails(Train train)
+    public static void tails(List<Train> tail)
     {
-        List<Train> tail = dequeueTrainsFromIndex(waitingList.indexOf(train));
-
         for (int i = 1; i < tail.size(); i++) {
             Train t = tail.get(i);
             LocalTime at = t.getActualArrival();
