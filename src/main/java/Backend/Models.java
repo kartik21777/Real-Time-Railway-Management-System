@@ -121,6 +121,7 @@ public class Models {
             train.setActualArrival(train.getArrivalTime());
             train.setActualDeparture(train.getDepartureTime());
         }
+        train.setPlatformId(p1.getId());
         addPlatform(p1);
     }
     public static void tails(List<Train> tail)

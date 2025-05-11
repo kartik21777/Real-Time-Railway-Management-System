@@ -14,6 +14,7 @@ public class Delete {
             Train t = tail.get(i);
             Models.set(t);
         }
+        Models.waitingList.addAll(tail);
         Models.waitingList.remove(train);
     }
     public static int deletePlatform(Platform platform)
