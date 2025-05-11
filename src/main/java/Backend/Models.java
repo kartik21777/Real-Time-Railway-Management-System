@@ -13,6 +13,7 @@ public class Models {
 
     public static PriorityQueue<Platform> platformHeap;
     public static List<Train> waitingList;
+    public static List<Train> processedList;
 
     static {
         platformHeap = new PriorityQueue<>(
@@ -20,6 +21,7 @@ public class Models {
                         .thenComparing(Platform::getId)
         );
         waitingList = new ArrayList<>();
+        processedList = new ArrayList<>();
     }
 
     public static void addPlatform(Platform platform) {
@@ -66,6 +68,7 @@ public class Models {
     public static List<Train> getAllWaitingTrains() {
         return Collections.unmodifiableList(waitingList);
     }
+
     public static List<Train> dequeueTrainsFromIndex(int index) {
         if (index < 0 || index >= waitingList.size()) {
             return Collections.emptyList();
@@ -74,7 +77,32 @@ public class Models {
         waitingList.subList(index, waitingList.size()).clear();
         return sublist;
     }
+
     public static Duration getTrainDuration(Train train) {
         return Duration.between(train.getArrivalTime(), train.getDepartureTime());
+    }
+
+    public static void addProcessedTrain(Train train) {
+        processedList.add(train);
+        processedList.sort(Comparator.comparing(Train::getActualDeparture).reversed());
+    }
+
+    public static boolean removeProcessedTrain(Train train) {
+        return processedList.remove(train);
+    }
+
+    public static Train peekLastProcessedTrain() {
+        if (processedList.isEmpty()) {
+            return null;
+        }
+        return processedList.get(0);
+    }
+
+    public static List<Train> getAllProcessedTrains() {
+        return Collections.unmodifiableList(processedList);
+    }
+
+    public static void clearProcessedList() {
+        processedList.clear();
     }
 }
