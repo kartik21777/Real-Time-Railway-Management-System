@@ -146,10 +146,6 @@ public class Models {
                 platformHeap.add(plat);
             }
         }
-        for (int i = 0; i < tail.size(); i++)
-        {
-            Train t = tail.get(i);
-            set(t);
-        }
+
     }
 }

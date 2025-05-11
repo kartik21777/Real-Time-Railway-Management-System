@@ -1,12 +1,10 @@
 package Backend;
-import java.time.Duration;
-import application.Train;
-import application.Platform;
 
-import java.time.LocalTime;
+import application.Train;
 
 import java.util.List;
-public class AddTrain {
+
+public class Allocation {
 
     public static void allocatePlatform(Train train) {
         Models.enqueueTrain(train);
@@ -15,6 +13,12 @@ public class AddTrain {
         }
         else {
             Models.tails(train);
+            List<Train> tail = Models.dequeueTrainsFromIndex(Models.waitingList.indexOf(train));
+            for (int i = 0; i < tail.size(); i++)
+            {
+                Train t = tail.get(i);
+                Models.set(t);
+            }
         }
     }
 }
