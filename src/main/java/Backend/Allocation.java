@@ -19,6 +19,7 @@ public class Allocation {
                 Train t = tail.get(i);
                 Models.set(t);
             }
+            Models.waitingList.addAll(tail);
         }
     }
 }
