@@ -55,7 +55,6 @@ public class TextFields implements ActionListener{
         frame.add(t3);
         frame.add(t4);
         frame.add(t5);
-
     }
 
     @Override

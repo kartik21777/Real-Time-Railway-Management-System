@@ -101,6 +101,23 @@ public class Models {
     }
     public static void tails(List<Train> tail)
     {
+        for(int i = 0;i<processedList.size();++i)
+        {
+            Train t = processedList.get(i);
+            LocalTime dt = t.getActualDeparture();
+            int pid = t.getPlatformId();
+            Platform plat = null;
+            for (Platform p : platformHeap) {
+                if (p.getId() == pid) {
+                    plat = p;
+                    break;
+                }
+            }
+            platformHeap.remove(plat);
+            plat.setNextFree(dt);
+            plat.setFlag(1);
+            platformHeap.add(plat);
+        }
         for (int i = 0; i < tail.size(); i++) {
             Train t = tail.get(i);
             LocalTime dt = t.getActualDeparture();
@@ -121,19 +138,24 @@ public class Models {
             }
             else if(dt.isAfter(plat.getNextFree()))
             {
-                platformHeap.remove(plat);
                 plat.setNextFree(dt);
                 plat.setFlag(1);
-                platformHeap.add(plat);
             }
+            }
+
             for(Platform platform : platformHeap)
             {
                 if(platform.getFlag()==1)
                 {
                     platform.setFlag(0);
                 }
-                platform.setNextFree(LocalTime.of(0,0));
+                else
+                {
+                    platform.setNextFree(LocalTime.of(0,0));
+                }
             }
-        }
+            List<Platform> all = new ArrayList<>(Models.platformHeap);
+            Models.platformHeap.clear();
+            Models.platformHeap.addAll(all);
     }
 }

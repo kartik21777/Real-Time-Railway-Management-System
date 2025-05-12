@@ -10,20 +10,25 @@ public class Allocation {
 
     public static void allocatePlatform(Train train) {
         Models.enqueueTrain(train);
-        if (Models.getLastTrain().getId() == train.getId()) {//id se check karna hai
+        if (Models.getLastTrain().getId() == train.getId()) {
             Models.set(train);
+            return;
         }
-        else {
-            List<Train> tail = Models.dequeueTrainsFromIndex(0,Models.waitingList.indexOf(train));
-            Models.tails(tail);
-            for (int i = 0; i < tail.size(); i++)
-            {
-                Train t = tail.get(i);
-                Models.set(t);
-            }
-            Models.waitingList.addAll(tail);
+        int idx  = Models.waitingList.indexOf(train);
+        List<Train> head = new ArrayList<>( Models.waitingList.subList(0,     idx) );
+        List<Train> tail = new ArrayList<>( Models.waitingList.subList(idx+1, Models.waitingList.size()) );
+        Models.tails(head);
+        Models.waitingList.clear();
+        Models.waitingList.addAll(head);
+        Models.waitingList.add(train);
+        Models.waitingList.addAll(tail);
+        System.out.println(Models.waitingList);
+        Models.set(train);
+        for (Train t : tail) {
+            Models.set(t);
         }
     }
+
     public static void addPlatform(Platform platform, LocalTime now)
     {
         if (Models.waitingList.isEmpty()&&Models.processedList.isEmpty())
