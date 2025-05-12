@@ -33,11 +33,11 @@ public class Allocation {
         else if(Models.processedList.isEmpty())
         {
             Models.platformHeap.add(platform);
+            List<Platform> all = new ArrayList<>(Models.platformHeap);
             for (Platform p : Models.platformHeap)
             {
                 p.setNextFree(now);
             }
-            List<Platform> all = new ArrayList<>(Models.platformHeap);
             Models.platformHeap.clear();
             Models.platformHeap.addAll(all);
             for (int i = 0; i < Models.waitingList.size(); i++)
@@ -54,6 +54,7 @@ public class Allocation {
                 if(plat.getFlag()==0)
                 {
                     plat.setFlag(1);
+                    plat.setNextFree(t.getActualDeparture());
                     continue;
                 }
                 Models.set(t);
@@ -65,6 +66,7 @@ public class Allocation {
         }
         else
         {
+            Models.platformHeap.add(platform);
             for (int i = 0; i < Models.processedList.size(); i++) {
                 Train t = Models.processedList.get(i);
                 LocalTime dt = t.getActualDeparture();
@@ -78,11 +80,34 @@ public class Allocation {
                 }
                 Models.platformHeap.remove(plat);
                 plat.setNextFree(dt);
+                plat.setFlag(1);
                 Models.platformHeap.add(plat);
             }
-            Models.platformHeap.add(platform);
+            for (int i = 0; i < Models.waitingList.size(); i++)
+            {
+                Train t = Models.waitingList.get(i);
+                int pid = t.getPlatformId();
+                Platform plat = null;
+                for (Platform p : Models.platformHeap) {
+                    if (p.getId() == pid) {
+                        plat = p;
+                        break;
+                    }
+                }
+                if(plat.getFlag()==0)
+                {
+                    plat.setFlag(1);
+                    plat.setNextFree(t.getActualDeparture());
+                    continue;
+                }
+            }
             for (Platform p : Models.platformHeap)
             {
+                if(p.getFlag()==1)
+                {
+                    p.setFlag(0);
+                    continue;
+                }
                 p.setNextFree(now);
             }
             List<Platform> all = new ArrayList<>(Models.platformHeap);
@@ -99,7 +124,7 @@ public class Allocation {
                         break;
                     }
                 }
-                if(plat.getFlag()==0)
+                if(plat.getFlag()==0 && plat.getNextFree()==t.getActualDeparture())
                 {
                     plat.setFlag(1);
                     continue;
