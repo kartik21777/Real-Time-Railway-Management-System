@@ -25,18 +25,6 @@ public class Models {
         processedList = new ArrayList<>();
     }
 
-    public static void addPlatform(Platform platform) {
-        platformHeap.add(platform);
-    }
-
-    public static Platform popNextPlatform() {
-        return platformHeap.poll();
-    }
-
-    public static Platform peekNextPlatform() {
-        return platformHeap.peek();
-    }
-
     public static void enqueueTrain(Train train) {
         waitingList.add(train);
         Collections.sort(waitingList, Comparator
@@ -45,19 +33,6 @@ public class Models {
         );
     }
 
-    public static Train dequeueFirstTrain() {
-        if (waitingList.isEmpty()) {
-            return null;
-        }
-        return waitingList.remove(0);
-    }
-
-    public static Train peekWaitingTrain() {
-        if (waitingList.isEmpty()) {
-            return null;
-        }
-        return waitingList.get(0);
-    }
 
     public static Train getLastTrain() {
         if (waitingList.isEmpty()) {
@@ -107,7 +82,7 @@ public class Models {
     }
     public static void set(Train train)
     {
-        Platform p1 = popNextPlatform();
+        Platform p1 = platformHeap.poll();
         Duration d = getTrainDuration(train);
         if(p1.getNextFree().isAfter(train.getArrivalTime()))
         {
@@ -122,7 +97,7 @@ public class Models {
             train.setActualDeparture(train.getDepartureTime());
         }
         train.setPlatformId(p1.getId());
-        addPlatform(p1);
+        platformHeap.add(p1);
     }
     public static void tails(List<Train> tail)
     {
