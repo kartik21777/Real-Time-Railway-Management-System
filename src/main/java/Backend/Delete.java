@@ -6,7 +6,9 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class Delete {
-    public static void deleteTrain(Train train) {
+    public static void deleteTrain(Train train,LocalTime now) {
+        if(!train.getActualArrival().isAfter(now)){}
+
         List<Train> tail = Models.dequeueTrainsFromIndex(Models.waitingList.indexOf(train) - 1);
         Models.tails(tail);
         for (int i = 2; i < tail.size(); ++i) {
@@ -17,6 +19,10 @@ public class Delete {
     }
 
     public static Platform deletePlatform(Platform platform) {
+        if(Models.platformHeap.size()==1){
+            System.out.println("At least 1 Platform required");
+            return platform;
+        }
         Train t = null;
         for (int i = 0; i < Models.processedList.size(); ++i) {
             t = Models.processedList.get(i);
