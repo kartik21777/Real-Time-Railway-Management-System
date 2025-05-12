@@ -3,6 +3,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 public class Platform {
     private int id;
+    private int f;
     private String platformName;
     private LocalTime nextFree;
     DateTimeFormatter formatter= DateTimeFormatter.ofPattern("HH:mm");
@@ -10,7 +11,7 @@ public class Platform {
         this.id = id;
         this.platformName = platformName;
         this.nextFree = LocalTime.of(0, 0);
-
+        this.f = 0;
     }
 
     // Getters
@@ -26,6 +27,7 @@ public class Platform {
         return nextFree;
     }
 
+    public int getFlag(){return f;}
 
     // Setters
     public void setId(int id) {
@@ -36,11 +38,13 @@ public class Platform {
         this.platformName = platformName;
     }
 
+    public void setFlag(int f){this.f = f;}
+
     public void setNextFree(LocalTime nextFree) {
         this.nextFree = nextFree;
     }
     public String toString() {
-        return String.format("Platform{id=%d, name='%s', nextFree='%s'}",
-                id, platformName, nextFree.format(formatter));
+        return String.format("Platform{id=%d, name='%s', nextFree='%s', f = %d}",
+                id, platformName, nextFree.format(formatter),f);
     }
 }

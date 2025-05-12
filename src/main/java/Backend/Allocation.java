@@ -2,7 +2,7 @@ package Backend;
 
 import application.Train;
 import application.Platform;
-
+import java.util.ArrayList;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class Allocation {
             Models.waitingList.addAll(tail);
         }
     }
-    public static void addPlatform(Platform platform)
+    public static void addPlatform(Platform platform, LocalTime now)
     {
         if (Models.waitingList.isEmpty()&&Models.processedList.isEmpty())
         {
@@ -33,9 +33,16 @@ public class Allocation {
         else if(Models.processedList.isEmpty())
         {
             Models.platformHeap.add(platform);
-            for (int i = 0; i < Models.waitingList.size(); i++) {
+            for (Platform p : Models.platformHeap)
+            {
+                p.setNextFree(now);
+            }
+            List<Platform> all = new ArrayList<>(Models.platformHeap);
+            Models.platformHeap.clear();
+            Models.platformHeap.addAll(all);
+            for (int i = 0; i < Models.waitingList.size(); i++)
+            {
                 Train t = Models.waitingList.get(i);
-                LocalTime at = t.getActualArrival();
                 int pid = t.getPlatformId();
                 Platform plat = null;
                 for (Platform p : Models.platformHeap) {
@@ -44,15 +51,11 @@ public class Allocation {
                         break;
                     }
                 }
-                if (plat != null && at.isBefore(plat.getNextFree())) {
-                    Models.platformHeap.remove(plat);
-                    plat.setNextFree(at);
-                    Models.platformHeap.add(plat);
+                if(plat.getFlag()==0)
+                {
+                    plat.setFlag(1);
+                    continue;
                 }
-            }
-            for (int i = 0; i < Models.waitingList.size(); i++)
-            {
-                Train t = Models.waitingList.get(i);
                 Models.set(t);
             }
         }
@@ -78,12 +81,31 @@ public class Allocation {
                 Models.platformHeap.add(plat);
             }
             Models.platformHeap.add(platform);
+            for (Platform p : Models.platformHeap)
+            {
+                p.setNextFree(now);
+            }
+            List<Platform> all = new ArrayList<>(Models.platformHeap);
+            Models.platformHeap.clear();
+            Models.platformHeap.addAll(all);
             for (int i = 0; i < Models.waitingList.size(); i++)
             {
                 Train t = Models.waitingList.get(i);
+                int pid = t.getPlatformId();
+                Platform plat = null;
+                for (Platform p : Models.platformHeap) {
+                    if (p.getId() == pid) {
+                        plat = p;
+                        break;
+                    }
+                }
+                if(plat.getFlag()==0)
+                {
+                    plat.setFlag(1);
+                    continue;
+                }
                 Models.set(t);
             }
-
         }
     }
 }
