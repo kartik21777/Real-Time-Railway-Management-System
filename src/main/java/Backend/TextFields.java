@@ -140,6 +140,7 @@ public class TextFields implements ActionListener{
                     System.out.println(train.getName() + " arrived"+" Platform:" + train.getPlatformId());
                     Models.addProcessedTrain(train);
                     Models.waitingList.remove(train);
+                    i--;
                 }
             }
             for(int i=0;i<Models.processedList.size();i++){
@@ -147,6 +148,7 @@ public class TextFields implements ActionListener{
                 if(simulatedTime.equals(train.getActualDeparture())){
                     System.out.println(train.getName() + " Departed"+" Platform:" + train.getPlatformId());
                     Models.removeProcessedTrain(train);
+                    i--;
                 }
             }
 

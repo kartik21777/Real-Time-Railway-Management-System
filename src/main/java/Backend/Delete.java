@@ -7,8 +7,6 @@ import java.util.List;
 
 public class Delete {
     public static void deleteTrain(Train train,LocalTime now) {
-        if(!train.getActualArrival().isAfter(now)){}
-
         List<Train> tail = Models.dequeueTrainsFromIndex(Models.waitingList.indexOf(train) - 1);
         Models.tails(tail);
         for (int i = 2; i < tail.size(); ++i) {
