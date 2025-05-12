@@ -45,12 +45,12 @@ public class Models {
         return Collections.unmodifiableList(waitingList);
     }
 
-    public static List<Train> dequeueTrainsFromIndex(int index) {
-        if (index < 0 || index >= waitingList.size()) {
+    public static List<Train> dequeueTrainsFromIndex(int startIndex, int endIndex) {
+        if (startIndex < 0 || endIndex >= waitingList.size() || startIndex > endIndex) {
             return Collections.emptyList();
         }
-        List<Train> sublist = new ArrayList<>(waitingList.subList(index, waitingList.size()));
-        waitingList.subList(index, waitingList.size()).clear();
+        List<Train> sublist = new ArrayList<>(waitingList.subList(startIndex, endIndex));
+        waitingList.subList(startIndex, endIndex).clear();
         return sublist;
     }
 
@@ -101,9 +101,9 @@ public class Models {
     }
     public static void tails(List<Train> tail)
     {
-        for (int i = 1; i < tail.size(); i++) {
+        for (int i = 0; i < tail.size(); i++) {
             Train t = tail.get(i);
-            LocalTime at = t.getActualArrival();
+            LocalTime dt = t.getActualDeparture();
             int pid = t.getPlatformId();
             Platform plat = null;
             for (Platform p : platformHeap) {
@@ -113,12 +113,20 @@ public class Models {
                 }
             }
 
-            if (plat != null && at.isBefore(plat.getNextFree())) {
+            if (plat.getFlag()==0 && dt.isAfter(plat.getNextFree())) {
                 platformHeap.remove(plat);
-                plat.setNextFree(at);
+                plat.setNextFree(dt);
+                plat.setFlag(1);
                 platformHeap.add(plat);
             }
+            for(Platform platform : platformHeap)
+            {
+                if(platform.getFlag()==1)
+                {
+                    platform.setFlag(0);
+                }
+                platform.setNextFree(LocalTime.of(0,0));
+            }
         }
-
     }
 }

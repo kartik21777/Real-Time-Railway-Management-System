@@ -7,9 +7,10 @@ import java.util.List;
 
 public class Delete {
     public static void deleteTrain(Train train,LocalTime now) {
-        List<Train> tail = Models.dequeueTrainsFromIndex(Models.waitingList.indexOf(train) - 1);
+        List<Train> tail = Models.dequeueTrainsFromIndex(0,Models.waitingList.indexOf(train));
         Models.tails(tail);
-        for (int i = 2; i < tail.size(); ++i) {
+        tail = Models.dequeueTrainsFromIndex(Models.waitingList.indexOf(train),Models.waitingList.size());
+        for (int i = 0; i < tail.size(); ++i) {
             Models.set(tail.get(i));
         }
         Models.waitingList.addAll(tail);

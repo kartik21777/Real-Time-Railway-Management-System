@@ -14,7 +14,7 @@ public class Allocation {
             Models.set(train);
         }
         else {
-            List<Train> tail = Models.dequeueTrainsFromIndex(Models.waitingList.indexOf(train));
+            List<Train> tail = Models.dequeueTrainsFromIndex(0,Models.waitingList.indexOf(train));
             Models.tails(tail);
             for (int i = 0; i < tail.size(); i++)
             {
