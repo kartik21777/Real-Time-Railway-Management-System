@@ -113,7 +113,14 @@ public class Models {
                 }
             }
 
-            if (plat.getFlag()==0 && dt.isAfter(plat.getNextFree())) {
+            if (plat.getFlag()==0) {
+                platformHeap.remove(plat);
+                plat.setNextFree(dt);
+                plat.setFlag(1);
+                platformHeap.add(plat);
+            }
+            else if(dt.isAfter(plat.getNextFree()))
+            {
                 platformHeap.remove(plat);
                 plat.setNextFree(dt);
                 plat.setFlag(1);
