@@ -45,6 +45,7 @@ public class Allocation {
             }
             Models.platformHeap.clear();
             Models.platformHeap.addAll(all);
+
             for (int i = 0; i < Models.waitingList.size(); i++)
             {
                 Train t = Models.waitingList.get(i);
@@ -59,7 +60,9 @@ public class Allocation {
                 if(plat.getFlag()==0)
                 {
                     plat.setFlag(1);
+                    Models.platformHeap.remove(plat);
                     plat.setNextFree(t.getActualDeparture());
+                    Models.platformHeap.add(plat);
                     continue;
                 }
                 Models.set(t);
