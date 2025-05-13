@@ -55,6 +55,9 @@ public class Delete {
                 plat.setNextFree(LocalTime.of(0, 0));
             }
         }
+        List<Platform> all = new ArrayList<>(Models.platformHeap);
+        Models.platformHeap.clear();
+        Models.platformHeap.addAll(all);
         for (int j = 0; j < Models.waitingList.size(); ++j) {
             Train t1 = Models.waitingList.get(j);
             Models.set(t1);
