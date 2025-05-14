@@ -22,7 +22,6 @@ public class Allocation {
         Models.waitingList.addAll(head);
         Models.waitingList.add(train);
         Models.waitingList.addAll(tail);
-        System.out.println(Models.waitingList);
         Models.set(train);
         for (Train t : tail) {
             Models.set(t);

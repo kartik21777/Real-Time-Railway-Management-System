@@ -9,8 +9,6 @@ public class Delete {
     public static void deleteTrain(Train train,LocalTime now) {
         int idx = Models.waitingList.indexOf(train);
 
-// 2) Non-destructively copy out the head (all before train)
-//    and the tail (all from train onward)
         List<Train> head = new ArrayList<>(Models.waitingList.subList(0, idx));
         List<Train> tail = new ArrayList<>(Models.waitingList.subList(idx+1, Models.waitingList.size()));
 
